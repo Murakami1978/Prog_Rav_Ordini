@@ -112,6 +112,12 @@
     <Compile Include="BO\INFORMAZIONI.cs" />
     <Compile Include="BO\INVENTARI.cs" />
     <Compile Include="CX.cs" />
+    <Compile Include="Forms\Form_Impostazioni.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_Impostazioni.Designer.cs">
+      <DependentUpon>Form_Impostazioni.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Principale.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +130,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\Avanzamento.resx">
       <DependentUpon>Avanzamento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_Impostazioni.resx">
+      <DependentUpon>Form_Impostazioni.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Principale.resx">
       <DependentUpon>Principale.cs</DependentUpon>

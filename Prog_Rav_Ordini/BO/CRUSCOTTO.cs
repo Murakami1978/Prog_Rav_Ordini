@@ -19,7 +19,6 @@ namespace Prog_Rav_Ordini.BO
         [Association(@"Cruscotto_Inventari")]
         public XPCollection<INVENTARI> inventari { get { return GetCollection<INVENTARI>(nameof(inventari)); } }
 
-
         string fLAMIERA_CODICE;
         [DbType("VARCHAR(10) CHARACTER SET ISO8859_1")]
         public string LAMIERA_CODICE
@@ -86,18 +85,6 @@ namespace Prog_Rav_Ordini.BO
         {
             get { return fKG_GIACENTI; }
             set { SetPropertyValue<int>(nameof(KG_GIACENTI), ref fKG_GIACENTI, value); }
-        }
-        int fNUM_CASSETTI_VUOTI;
-        public int NUM_CASSETTI_VUOTI
-        {
-            get { return fNUM_CASSETTI_VUOTI; }
-            set { SetPropertyValue<int>(nameof(NUM_CASSETTI_VUOTI), ref fNUM_CASSETTI_VUOTI, value); }
-        }
-        // Campo Calcolato
-        [NonPersistent]
-        public int Num_Cassetti_Pieni
-        {
-            get { return CASSETTI_NUMERO - NUM_CASSETTI_VUOTI; }
         }
 
     }

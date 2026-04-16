@@ -29,9 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.xpCollection_Cruscotto = new DevExpress.Xpo.XPCollection(this.components);
-            this.unitOfWork1 = new DevExpress.Xpo.UnitOfWork(this.components);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Principale));
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.panelControl11 = new DevExpress.XtraEditors.PanelControl();
+            this.simpleButton_Impostazioni = new DevExpress.XtraEditors.SimpleButton();
+            this.labelControl_VecchioCalcolo = new DevExpress.XtraEditors.LabelControl();
             this.panelControl8 = new DevExpress.XtraEditors.PanelControl();
             this.simpleButton_ImportaQuestoGiorno = new DevExpress.XtraEditors.SimpleButton();
             this.panelControl7 = new DevExpress.XtraEditors.PanelControl();
@@ -53,7 +55,6 @@
             this.panelControl5 = new DevExpress.XtraEditors.PanelControl();
             this.controlNavigator1 = new DevExpress.XtraEditors.ControlNavigator();
             this.gridControl_Inventari = new DevExpress.XtraGrid.GridControl();
-            this.xpCollection_Inventari = new DevExpress.Xpo.XPCollection(this.components);
             this.gridView_Inventari = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn2 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -69,10 +70,10 @@
             this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDELTA_KG = new DevExpress.XtraGrid.Columns.GridColumn();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.xpCollection_Cruscotto)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.unitOfWork1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl11)).BeginInit();
+            this.panelControl11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl8)).BeginInit();
             this.panelControl8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl7)).BeginInit();
@@ -86,8 +87,8 @@
             this.panelControl9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl6)).BeginInit();
             this.panelControl6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dateEdit_Inventari.Properties.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dateEdit_Inventari.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateEdit_Inventari.Properties.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl10)).BeginInit();
             this.panelControl10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).BeginInit();
@@ -95,24 +96,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl5)).BeginInit();
             this.panelControl5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl_Inventari)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.xpCollection_Inventari)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView_Inventari)).BeginInit();
             this.SuspendLayout();
-            // 
-            // xpCollection_Cruscotto
-            // 
-            this.xpCollection_Cruscotto.ObjectType = typeof(Prog_Rav_Ordini.BO.CRUSCOTTO);
-            this.xpCollection_Cruscotto.Session = this.unitOfWork1;
-            // 
-            // unitOfWork1
-            // 
-            this.unitOfWork1.IsObjectModifiedOnNonPersistentPropertyChange = null;
-            this.unitOfWork1.LockingOption = DevExpress.Xpo.LockingOption.None;
-            this.unitOfWork1.TrackPropertiesModifications = false;
             // 
             // panelControl1
             // 
             this.panelControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.panelControl1.Controls.Add(this.panelControl11);
+            this.panelControl1.Controls.Add(this.labelControl_VecchioCalcolo);
             this.panelControl1.Controls.Add(this.panelControl8);
             this.panelControl1.Controls.Add(this.panelControl7);
             this.panelControl1.Controls.Add(this.panelControl3);
@@ -128,6 +119,48 @@
             this.panelControl1.Padding = new System.Windows.Forms.Padding(2);
             this.panelControl1.Size = new System.Drawing.Size(1489, 44);
             this.panelControl1.TabIndex = 6;
+            // 
+            // panelControl11
+            // 
+            this.panelControl11.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.panelControl11.Controls.Add(this.simpleButton_Impostazioni);
+            this.panelControl11.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panelControl11.Location = new System.Drawing.Point(1154, 2);
+            this.panelControl11.Name = "panelControl11";
+            this.panelControl11.Padding = new System.Windows.Forms.Padding(5);
+            this.panelControl11.Size = new System.Drawing.Size(39, 40);
+            this.panelControl11.TabIndex = 18;
+            // 
+            // simpleButton_Impostazioni
+            // 
+            this.simpleButton_Impostazioni.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.simpleButton_Impostazioni.Appearance.Options.UseFont = true;
+            this.simpleButton_Impostazioni.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.simpleButton_Impostazioni.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton_Impostazioni.ImageOptions.Image")));
+            this.simpleButton_Impostazioni.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.simpleButton_Impostazioni.Location = new System.Drawing.Point(5, 5);
+            this.simpleButton_Impostazioni.Name = "simpleButton_Impostazioni";
+            this.simpleButton_Impostazioni.Size = new System.Drawing.Size(29, 30);
+            this.simpleButton_Impostazioni.TabIndex = 8;
+            this.simpleButton_Impostazioni.Click += new System.EventHandler(this.simpleButton_Impostazioni_Click);
+            // 
+            // labelControl_VecchioCalcolo
+            // 
+            this.labelControl_VecchioCalcolo.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.labelControl_VecchioCalcolo.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl_VecchioCalcolo.Appearance.Options.UseBackColor = true;
+            this.labelControl_VecchioCalcolo.Appearance.Options.UseFont = true;
+            this.labelControl_VecchioCalcolo.Appearance.Options.UseTextOptions = true;
+            this.labelControl_VecchioCalcolo.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.labelControl_VecchioCalcolo.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            this.labelControl_VecchioCalcolo.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this.labelControl_VecchioCalcolo.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
+            this.labelControl_VecchioCalcolo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.labelControl_VecchioCalcolo.Location = new System.Drawing.Point(913, 2);
+            this.labelControl_VecchioCalcolo.Name = "labelControl_VecchioCalcolo";
+            this.labelControl_VecchioCalcolo.Size = new System.Drawing.Size(128, 40);
+            this.labelControl_VecchioCalcolo.TabIndex = 17;
+            this.labelControl_VecchioCalcolo.Text = " CALCOLO SU CASSETTI VUOTI";
             // 
             // panelControl8
             // 
@@ -360,7 +393,6 @@
             // 
             // gridControl_Inventari
             // 
-            this.gridControl_Inventari.DataSource = this.xpCollection_Inventari;
             this.gridControl_Inventari.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl_Inventari.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridControl_Inventari.Location = new System.Drawing.Point(2, 46);
@@ -370,11 +402,6 @@
             this.gridControl_Inventari.TabIndex = 8;
             this.gridControl_Inventari.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView_Inventari});
-            // 
-            // xpCollection_Inventari
-            // 
-            this.xpCollection_Inventari.ObjectType = typeof(Prog_Rav_Ordini.BO.INVENTARI);
-            this.xpCollection_Inventari.Session = this.unitOfWork1;
             // 
             // gridView_Inventari
             // 
@@ -496,7 +523,7 @@
             this.gridColumn8.AppearanceHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.gridColumn8.AppearanceHeader.Options.UseBackColor = true;
             this.gridColumn8.Caption = "N° Cass. Non Vuoti";
-            this.gridColumn8.FieldName = "Num_Cassetti_Pieni";
+            this.gridColumn8.FieldName = "Num_Cassetti_Pieni_Calc";
             this.gridColumn8.Name = "gridColumn8";
             this.gridColumn8.OptionsColumn.AllowEdit = false;
             this.gridColumn8.OptionsColumn.ReadOnly = true;
@@ -511,7 +538,7 @@
             this.gridColumn12.AppearanceHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.gridColumn12.AppearanceHeader.Options.UseBackColor = true;
             this.gridColumn12.Caption = "N° Cass. da Riemp.";
-            this.gridColumn12.FieldName = "NUM_CASSETTI_VUOTI";
+            this.gridColumn12.FieldName = "Num_Cassetti_Vuoti_Calc";
             this.gridColumn12.Name = "gridColumn12";
             this.gridColumn12.OptionsColumn.AllowEdit = false;
             this.gridColumn12.OptionsColumn.ReadOnly = true;
@@ -589,10 +616,11 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Ravaglioli - Magazzino";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this.xpCollection_Cruscotto)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.unitOfWork1)).EndInit();
+            this.Shown += new System.EventHandler(this.Principale_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.panelControl11)).EndInit();
+            this.panelControl11.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl8)).EndInit();
             this.panelControl8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl7)).EndInit();
@@ -615,15 +643,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl5)).EndInit();
             this.panelControl5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl_Inventari)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.xpCollection_Inventari)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView_Inventari)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private DevExpress.Xpo.XPCollection xpCollection_Cruscotto;
-        private DevExpress.Xpo.UnitOfWork unitOfWork1;
         private DevExpress.XtraEditors.PanelControl panelControl1;
         private DevExpress.XtraEditors.PanelControl panelControl3;
         private DevExpress.XtraEditors.SimpleButton simpleButton_Importa_Ultimi_Dati;
@@ -635,7 +660,6 @@
         private DevExpress.XtraEditors.ControlNavigator controlNavigator1;
         private System.Windows.Forms.Label label1;
         private DevExpress.XtraGrid.GridControl gridControl_Inventari;
-        private DevExpress.Xpo.XPCollection xpCollection_Inventari;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView_Inventari;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn2;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn3;
@@ -662,6 +686,9 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn12;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Timer timer1;
+        private DevExpress.XtraEditors.LabelControl labelControl_VecchioCalcolo;
+        private DevExpress.XtraEditors.PanelControl panelControl11;
+        private DevExpress.XtraEditors.SimpleButton simpleButton_Impostazioni;
     }
 }
 

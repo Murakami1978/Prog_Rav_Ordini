@@ -1,4 +1,11 @@
-﻿using System;
+﻿using DevExpress.ClipboardSource.SpreadsheetML;
+using DevExpress.Data.Filtering;
+using DevExpress.Utils.Drawing;
+using DevExpress.Xpo;
+using DevExpress.XtraGrid.Columns;
+using DevExpress.XtraGrid.Views.Grid;
+using Prog_Rav_Ordini.BO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,12 +16,6 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using DevExpress.Data.Filtering;
-using DevExpress.Utils.Drawing;
-using DevExpress.Xpo;
-using DevExpress.XtraGrid.Columns;
-using DevExpress.XtraGrid.Views.Grid;
-using Prog_Rav_Ordini.BO;
 using UtilityLuca;
 
 
@@ -24,6 +25,8 @@ namespace Prog_Rav_Ordini.Forms
     {
         CriteriaOperator crit_inventari = null;
         Avanzamento av = null;
+        UnitOfWork unitOfWork1;
+        XPCollection<INVENTARI> xpCollection_Inventari;
 
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         public Principale()
@@ -33,9 +36,12 @@ namespace Prog_Rav_Ordini.Forms
             Inizializza_EConnetti_Database();
             gridView_Inventari.OptionsBehavior.Editable = false;
             gridView_Inventari.OptionsBehavior.ReadOnly = true;
-            
+            gridControl_Inventari.DataSource = xpCollection_Inventari;
+
             Accedi_Rete.Accedi("\\\\192.168.176.230\\home", "metalFTP01", "ArTsGf2k24", "METALSIDER-SPA");
             //Accedi_Rete.Accedi("\\\\192.168.176.230\\home", "metalFTP01", "$ruota2018", "METALSIDER-SPA");
+
+            unitOfWork1 = new UnitOfWork();
 
             INFORMAZIONI inf = unitOfWork1.FindObject<INFORMAZIONI>(null);
             if (inf != null)
@@ -61,8 +67,9 @@ namespace Prog_Rav_Ordini.Forms
         private void Aggiorna_Criteria_Inventari()
         {
             crit_inventari = CriteriaOperator.Parse("DATA=?", Utility_Generiche.DataDaItalianaAdAmericana(dateEdit_Inventari.DateTime.ToShortDateString()));
-            xpCollection_Inventari.Criteria = crit_inventari;
-            xpCollection_Inventari.Reload();
+            xpCollection_Inventari = new XPCollection<INVENTARI>(unitOfWork1, crit_inventari);
+            gridControl_Inventari.DataSource = null;
+            gridControl_Inventari.DataSource = xpCollection_Inventari;
             gridView_Inventari.FocusedRowHandle = 0;
         }
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -131,7 +138,8 @@ namespace Prog_Rav_Ordini.Forms
             {
                 item.KG_GIACENTI = 0;
                 item.FG_GIACENTI = 0;
-                item.NUM_CASSETTI_VUOTI = 0;
+                //item.NUM_CASSETTI_VUOTI = 0;
+                item.NUMERO_CASSETTI_PIENI = 0;
                 item.Save();
             }
 
@@ -159,7 +167,10 @@ namespace Prog_Rav_Ordini.Forms
                 dato.KG_GIACENTI += Kg;
                 int Fg = Int32.Parse(riga.ItemArray[CX.Fg].ToString());
                 dato.FG_GIACENTI += Fg;
-                if (Fg == 0) dato.NUM_CASSETTI_VUOTI += 1;
+
+                if (Fg > 0) dato.NUMERO_CASSETTI_PIENI += 1;
+                //if (Fg == 0) dato.NUM_CASSETTI_VUOTI += 1;
+
                 dato.Save();
                 unitOfWork1.CommitChanges();
             }
@@ -185,7 +196,7 @@ namespace Prog_Rav_Ordini.Forms
                 }
                 if (giorno_prima != null)
                 {
-                    item.DELTA_KG = giorno_prima.KG_GIACENTI - item.KG_GIACENTI; 
+                    item.DELTA_KG = giorno_prima.KG_GIACENTI - item.KG_GIACENTI;
                     item.DELTA_FG = giorno_prima.FG_GIACENTI - item.FG_GIACENTI;
                 }
                 else
@@ -201,58 +212,11 @@ namespace Prog_Rav_Ordini.Forms
             unitOfWork1.CommitTransaction();
             timer1.Start();
         }
-        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        /*private void Aggiorna_Dati()
-        {
-            // Metto a zero tutte le somme
-            Resetta_Dati();
 
-            // Trovo il file più recente dentro la cartella "Globale.Cartella_Files"
-            if (!Directory.Exists(Globale.Cartella_Files)) { MessageBox.Show("Cartella \"" + Globale.Cartella_Files + "\" inesistente", "Errore", MessageBoxButtons.OK); return; }
-            string nome_file = new DirectoryInfo(Globale.Cartella_Files).GetFiles().OrderByDescending(o => o.Name).FirstOrDefault().FullName;
-            if (nome_file == "") return;
-
-            // Riempio "tabella" con i dati presi dal file
-            DataTable tabella = ConvertCSVtoDataTable(nome_file);
-            if (tabella == null) return;
-
-            // Scansiono le righe della tabella
-            DataRow[] Righe_Trovate = tabella.Select();
-            foreach (DataRow riga in Righe_Trovate)
-            {
-                // Cerco il "codice lamiera" dentro al database
-                string cod_lam = riga.ItemArray[CX.Lamiera_Codice].ToString();
-                CRUSCOTTO dato = unitOfWork1.FindObject<CRUSCOTTO>(CriteriaOperator.Parse("LAMIERA_CODICE=?", cod_lam));
-                if (dato != null)
-                {
-                    int Kg = Int32.Parse(riga.ItemArray[CX.Kg].ToString());
-                    dato.KG_GIACENTI += Kg;
-                    int Fg = Int32.Parse(riga.ItemArray[CX.Fg].ToString());
-                    dato.FG_GIACENTI += Fg;
-                    if (Fg == 0) dato.NUM_CASSETTI_VUOTI += 1;
-                    dato.Save();
-                }
-            }
-
-            // Aggiorno Data Aggiornamento
-            string data = EstraiData_Da_NomeFile(nome_file);
-            label_AggiornamentoData.Text = data;
-
-            INFORMAZIONI inf = unitOfWork1.FindObject<INFORMAZIONI>(null);
-            if (inf == null) inf = new INFORMAZIONI(unitOfWork1);
-            if (inf != null)
-            {
-                inf.AGGIORNAMENTO_DATA = Utility_Generiche.DataDaItalianaAdAmericana(data);
-                inf.Save();
-            }
-
-            unitOfWork1.CommitTransaction();
-        }*/
-        //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         private DataTable ConvertCSVtoDataTable(string strFilePath)
         {
             DataTable dt = new DataTable();
-            
+
             // Remmata perchè accederebbe al file anche in scrittura
             //using (StreamReader sr = new StreamReader(strFilePath))
 
@@ -278,19 +242,7 @@ namespace Prog_Rav_Ordini.Forms
             }
             return dt;
         }
-        //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        /*private void Resetta_Dati()
-        {
-            foreach (CRUSCOTTO item in xpCollection_Cruscotto)
-            {
-                item.FG_GIACENTI = 0;
-                item.KG_GIACENTI = 0;
-                item.NUM_CASSETTI_VUOTI = 0;
-                item.Save();
-            }
-            unitOfWork1.CommitTransaction();
-        }*/
-        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
         private string EstraiData_Da_NomeFile(string nome_file)
         {
             // 20020238INV20181017.csv
@@ -329,22 +281,7 @@ namespace Prog_Rav_Ordini.Forms
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         private void gridView_Cruscotto_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
         {
-            /*GridView gv = (sender as GridView);
-            int IndiceRiga_DataSource = gv.GetDataSourceRowIndex(e.RowHandle);
-            CRUSCOTTO riga = (CRUSCOTTO)xpCollection_Cruscotto[IndiceRiga_DataSource];
 
-            if (
-                ((e.Column.FieldName == "Num_Cassetti_Pieni") && (riga.Num_Cassetti_Pieni < riga.SCORTA_MIN_NUM_CASSETTI)) || 
-                ((e.Column.FieldName == "KG_GIACENTI") && (riga.KG_GIACENTI < riga.Scorta_Min_Kg_Totali))
-               )
-            {
-                //e.Appearance.ForeColor = Color.Red;
-                //e.Appearance.Font = new Font(e.Appearance.Font.Name, e.Appearance.Font.Size, FontStyle.Bold);
-                e.Appearance.BackColor = Color.Red;
-                e.Appearance.ForeColor = Color.White;
-                e.DefaultDraw();
-                e.Handled = true;
-            }*/
         }
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         private void dateEdit_Inventari_DateTimeChanged(object sender, EventArgs e)
@@ -361,7 +298,7 @@ namespace Prog_Rav_Ordini.Forms
             if (
                 riga.Cruscotto != null &&
                 (
-                    ((e.Column.FieldName == "Num_Cassetti_Pieni") && (riga.Num_Cassetti_Pieni < riga.Cruscotto.SCORTA_MIN_NUM_CASSETTI)) ||
+                    ((e.Column.FieldName == "NUMERO_CASSETTI_PIENI") && (riga.NUMERO_CASSETTI_PIENI < riga.Cruscotto.SCORTA_MIN_NUM_CASSETTI)) ||
                     ((e.Column.FieldName == "KG_GIACENTI") && (riga.KG_GIACENTI < riga.Cruscotto.Scorta_Min_Kg_Totali)) ||
                     ((e.Column.FieldName == "FG_GIACENTI") && (riga.FG_GIACENTI < riga.Cruscotto.Scorta_Min_Fg_Totali))
                 )
@@ -369,7 +306,7 @@ namespace Prog_Rav_Ordini.Forms
             {
                 if (gv.FocusedRowHandle == e.RowHandle)
                 {
-                    if (gv.FocusedColumn == e.Column) e.Appearance.BackColor = Color.DarkRed; else e.Appearance.BackColor = Color.OrangeRed; 
+                    if (gv.FocusedColumn == e.Column) e.Appearance.BackColor = Color.DarkRed; else e.Appearance.BackColor = Color.OrangeRed;
                 }
                 else e.Appearance.BackColor = Color.Red;
 
@@ -432,12 +369,20 @@ namespace Prog_Rav_Ordini.Forms
         {
             dateEdit_Inventari.DateTime = dateEdit_Inventari.DateTime.AddDays(-1);
             Aggiorna_Criteria_Inventari();
+            ImpostaVisibilita_LabelCalcolo();
         }
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         private void simpleButton_Right_Click(object sender, EventArgs e)
         {
             dateEdit_Inventari.DateTime = dateEdit_Inventari.DateTime.AddDays(1);
             Aggiorna_Criteria_Inventari();
+            ImpostaVisibilita_LabelCalcolo();
+        }
+
+        private void ImpostaVisibilita_LabelCalcolo()
+        {
+            INVENTARI inv = (INVENTARI)gridView_Inventari.GetFocusedRow();
+            labelControl_VecchioCalcolo.Visible = inv != null && inv.DATA.CompareTo(Globale.Data_Cambio_Calcolo) < 0;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -445,7 +390,28 @@ namespace Prog_Rav_Ordini.Forms
             timer1.Stop();
             progressBar1.Value = 0;
         }
-        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+        private void simpleButton1_Click(object sender, EventArgs e)
+        {
+            XPCollection<INVENTARI> coll = new XPCollection<INVENTARI>(CriteriaOperator.Parse("DATA<?", "2025/04/15"));
+            foreach (var item in coll)
+            {
+                item.NUMERO_CASSETTI_PIENI = item.Num_Cassetti_Pieni_Old;
+                item.Save();
+            }
+
+        }
+
+        private void Principale_Shown(object sender, EventArgs e)
+        {
+            ImpostaVisibilita_LabelCalcolo();
+        }
+
+        private void simpleButton_Impostazioni_Click(object sender, EventArgs e)
+        {
+            Form_Impostazioni f = new Form_Impostazioni(unitOfWork1);
+            f.ShowDialog();
+            gridView_Inventari.RefreshData();
+        }
     }
 }

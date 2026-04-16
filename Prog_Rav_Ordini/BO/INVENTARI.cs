@@ -24,7 +24,6 @@ namespace Prog_Rav_Ordini.BO
             set { SetPropertyValue(nameof(Cruscotto), ref fCruscotto, value); }
         }
 
-
         string fDATA;
         [DbType("VARCHAR(10) CHARACTER SET ISO8859_1")]
         public string DATA
@@ -51,24 +50,58 @@ namespace Prog_Rav_Ordini.BO
             get { return fKG_GIACENTI; }
             set { SetPropertyValue<int>(nameof(KG_GIACENTI), ref fKG_GIACENTI, value); }
         }
+
+        [NonPersistent] public int Num_Cassetti_Pieni_Calc
+        {
+            get
+            {
+                if (DATA.CompareTo(Globale.Data_Cambio_Calcolo) < 0) return Num_Cassetti_Pieni_Old;
+                else return NUMERO_CASSETTI_PIENI;
+            }
+        }
+
+        [NonPersistent] public int Num_Cassetti_Vuoti_Calc
+        {
+            get
+            {
+                if (DATA.CompareTo(Globale.Data_Cambio_Calcolo) < 0) return NUM_CASSETTI_VUOTI;
+                else return Numero_Cassetti_Vuoti;
+            }
+        }
+
+
+        // NUOVI
+        int fNUMERO_CASSETTI_PIENI;
+        public int NUMERO_CASSETTI_PIENI
+        {
+            get { return fNUMERO_CASSETTI_PIENI; }
+            set { SetPropertyValue<int>(nameof(NUMERO_CASSETTI_PIENI), ref fNUMERO_CASSETTI_PIENI, value); }
+        }
+        [NonPersistent] public int Numero_Cassetti_Vuoti
+        {
+            get
+            {
+                if (fCruscotto != null) return fCruscotto.CASSETTI_NUMERO - NUMERO_CASSETTI_PIENI;
+                else return -1;
+            }
+        }
+
+        // VECCHI
         int fNUM_CASSETTI_VUOTI;
         public int NUM_CASSETTI_VUOTI
         {
             get { return fNUM_CASSETTI_VUOTI; }
             set { SetPropertyValue<int>(nameof(NUM_CASSETTI_VUOTI), ref fNUM_CASSETTI_VUOTI, value); }
         }
-        // Campo Calcolato
-        [NonPersistent]
-        public int Num_Cassetti_Pieni
+        [NonPersistent] public int Num_Cassetti_Pieni_Old
         {
             get
             {
-                if (fCruscotto != null)
-                    return fCruscotto.CASSETTI_NUMERO - NUM_CASSETTI_VUOTI;
-                else
-                    return -1;
+                if (fCruscotto != null) return fCruscotto.CASSETTI_NUMERO - NUM_CASSETTI_VUOTI;
+                else return -1;
             }
         }
+
         int fDELTA_FG;
         public int DELTA_FG
         {
