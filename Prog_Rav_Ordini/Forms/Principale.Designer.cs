@@ -42,8 +42,6 @@
             this.simpleButton_Importa_Ultimi_Dati = new DevExpress.XtraEditors.SimpleButton();
             this.panelControl4 = new DevExpress.XtraEditors.PanelControl();
             this.checkEdit_AbilitaModifiche = new DevExpress.XtraEditors.CheckEdit();
-            this.label_AggiornamentoData = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.panelControl9 = new DevExpress.XtraEditors.PanelControl();
             this.simpleButton_Right = new DevExpress.XtraEditors.SimpleButton();
             this.panelControl6 = new DevExpress.XtraEditors.PanelControl();
@@ -108,8 +106,6 @@
             this.panelControl1.Controls.Add(this.panelControl7);
             this.panelControl1.Controls.Add(this.panelControl3);
             this.panelControl1.Controls.Add(this.panelControl4);
-            this.panelControl1.Controls.Add(this.label_AggiornamentoData);
-            this.panelControl1.Controls.Add(this.label1);
             this.panelControl1.Controls.Add(this.panelControl9);
             this.panelControl1.Controls.Add(this.panelControl6);
             this.panelControl1.Controls.Add(this.panelControl10);
@@ -156,7 +152,7 @@
             this.labelControl_VecchioCalcolo.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this.labelControl_VecchioCalcolo.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
             this.labelControl_VecchioCalcolo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.labelControl_VecchioCalcolo.Location = new System.Drawing.Point(913, 2);
+            this.labelControl_VecchioCalcolo.Location = new System.Drawing.Point(697, 2);
             this.labelControl_VecchioCalcolo.Name = "labelControl_VecchioCalcolo";
             this.labelControl_VecchioCalcolo.Size = new System.Drawing.Size(128, 40);
             this.labelControl_VecchioCalcolo.TabIndex = 17;
@@ -167,7 +163,7 @@
             this.panelControl8.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.panelControl8.Controls.Add(this.simpleButton_ImportaQuestoGiorno);
             this.panelControl8.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelControl8.Location = new System.Drawing.Point(687, 2);
+            this.panelControl8.Location = new System.Drawing.Point(471, 2);
             this.panelControl8.Name = "panelControl8";
             this.panelControl8.Padding = new System.Windows.Forms.Padding(5);
             this.panelControl8.Size = new System.Drawing.Size(226, 40);
@@ -213,7 +209,7 @@
             this.panelControl3.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.panelControl3.Controls.Add(this.simpleButton_Importa_Ultimi_Dati);
             this.panelControl3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelControl3.Location = new System.Drawing.Point(524, 2);
+            this.panelControl3.Location = new System.Drawing.Point(308, 2);
             this.panelControl3.Name = "panelControl3";
             this.panelControl3.Padding = new System.Windows.Forms.Padding(5);
             this.panelControl3.Size = new System.Drawing.Size(163, 40);
@@ -255,30 +251,6 @@
             this.checkEdit_AbilitaModifiche.Size = new System.Drawing.Size(120, 20);
             this.checkEdit_AbilitaModifiche.TabIndex = 10;
             this.checkEdit_AbilitaModifiche.CheckedChanged += new System.EventHandler(this.checkEdit_AbilitaModifiche_CheckedChanged);
-            // 
-            // label_AggiornamentoData
-            // 
-            this.label_AggiornamentoData.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label_AggiornamentoData.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_AggiornamentoData.Location = new System.Drawing.Point(419, 2);
-            this.label_AggiornamentoData.Name = "label_AggiornamentoData";
-            this.label_AggiornamentoData.Size = new System.Drawing.Size(105, 40);
-            this.label_AggiornamentoData.TabIndex = 6;
-            this.label_AggiornamentoData.Text = "00/00/0000";
-            this.label_AggiornamentoData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label_AggiornamentoData.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(308, 2);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(111, 40);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "Aggiornato al:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label1.Visible = false;
             // 
             // panelControl9
             // 
@@ -652,13 +624,11 @@
         private DevExpress.XtraEditors.PanelControl panelControl1;
         private DevExpress.XtraEditors.PanelControl panelControl3;
         private DevExpress.XtraEditors.SimpleButton simpleButton_Importa_Ultimi_Dati;
-        private System.Windows.Forms.Label label_AggiornamentoData;
         private DevExpress.XtraEditors.PanelControl panelControl2;
         private DevExpress.XtraEditors.PanelControl panelControl4;
         private DevExpress.XtraEditors.CheckEdit checkEdit_AbilitaModifiche;
         private DevExpress.XtraEditors.PanelControl panelControl5;
         private DevExpress.XtraEditors.ControlNavigator controlNavigator1;
-        private System.Windows.Forms.Label label1;
         private DevExpress.XtraGrid.GridControl gridControl_Inventari;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView_Inventari;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn2;

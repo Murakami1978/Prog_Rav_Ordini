@@ -5,6 +5,7 @@
         public static string Nome_Server = null;
         public static string ConnectionString = null;
         public static string Cartella_Files = "";
+        public static string Aggiornamento_Data = "";
         public static string Data_Cambio_Calcolo = "2026/04/15";
     }
 }

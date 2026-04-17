@@ -22,6 +22,7 @@ namespace Prog_Rav_Ordini.Forms
             InitializeComponent();
             uow = uowX;
             XPCollection<CRUSCOTTO> col = new XPCollection<CRUSCOTTO>(uow);
+            col.Sorting = new SortingCollection(new SortProperty("LAMIERA_CODICE", DevExpress.Xpo.DB.SortingDirection.Ascending));
             gridControl1.DataSource = col;
         }
 

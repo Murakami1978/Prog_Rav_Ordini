@@ -43,11 +43,12 @@ namespace Prog_Rav_Ordini.Forms
 
             unitOfWork1 = new UnitOfWork();
 
-            INFORMAZIONI inf = unitOfWork1.FindObject<INFORMAZIONI>(null);
-            if (inf != null)
+            INFORMAZIONI informazioni = unitOfWork1.FindObject<INFORMAZIONI>(null);
+            if (informazioni != null)
             {
-                label_AggiornamentoData.Text = Utility_Generiche.DataDaAmericanaAdItaliana(inf.AGGIORNAMENTO_DATA);
-                Globale.Cartella_Files = inf.CARTELLA_FILES_FTP;
+                //label_AggiornamentoData.Text = Utility_Generiche.DataDaAmericanaAdItaliana(inf.AGGIORNAMENTO_DATA);
+                Globale.Aggiornamento_Data = informazioni.AGGIORNAMENTO_DATA;
+                Globale.Cartella_Files = informazioni.CARTELLA_FILES_FTP;
             }
 
             // Ordino la griglia
@@ -132,35 +133,62 @@ namespace Prog_Rav_Ordini.Forms
         private void Inserisci_Dentro_Inventari(string nome_file, string data)
         {
             if (nome_file == "") return;
-            // Azzero le somme (nel caso siano già presenti i dati)
-            XPCollection<INVENTARI> coll = new XPCollection<INVENTARI>(CriteriaOperator.Parse("DATA=?", data));
-            foreach (INVENTARI item in coll)
+
+            bool Aggiornare_Cassetti_Reali = data.CompareTo(Globale.Aggiornamento_Data) > 0;
+
+            // Azzero i cassetti reali
+            if (Aggiornare_Cassetti_Reali)
             {
-                item.KG_GIACENTI = 0;
-                item.FG_GIACENTI = 0;
-                //item.NUM_CASSETTI_VUOTI = 0;
-                item.NUMERO_CASSETTI_PIENI = 0;
-                item.Save();
+                XPCollection<CRUSCOTTO> coll_cruscotto = new XPCollection<CRUSCOTTO>(unitOfWork1);
+                foreach (CRUSCOTTO item in coll_cruscotto)
+                {
+                    item.CASSETTI_NUMERO_REALI = 0;
+                    item.Save();
+                }
+                unitOfWork1.CommitChanges();
             }
+
+            // Azzero le somme (nel caso siano già presenti i dati)
+            XPCollection<INVENTARI> coll = new XPCollection<INVENTARI>(unitOfWork1, CriteriaOperator.Parse("DATA=?", data));
+            unitOfWork1.Delete(coll);
+            unitOfWork1.CommitChanges();
+            //foreach (INVENTARI item in coll)
+            //{
+            //    item.KG_GIACENTI = 0;
+            //    item.FG_GIACENTI = 0;
+            //    //item.NUM_CASSETTI_VUOTI = 0;
+            //    item.NUMERO_CASSETTI_PIENI = 0;
+            //    item.Save();
+            //}
 
             // Riempio "tabella" con i dati presi dal file
             DataTable tabella = ConvertCSVtoDataTable(nome_file);
             if (tabella == null) return;
 
+            string err_Cruscotto = null;
             // Scansiono le righe della tabella
             DataRow[] Righe_Trovate = tabella.Select();
             foreach (DataRow riga in Righe_Trovate)
             {
                 // Cerco il "codice lamiera" dentro al database
                 string cod_lam = riga.ItemArray[CX.Lamiera_Codice].ToString();
-                INVENTARI dato = null;
-                dato = unitOfWork1.FindObject<INVENTARI>(CriteriaOperator.Parse("DATA=? AND LAMIERA_CODICE=?", data, cod_lam));
+                INVENTARI dato = unitOfWork1.FindObject<INVENTARI>(CriteriaOperator.Parse("DATA=? AND LAMIERA_CODICE=?", data, cod_lam));
                 if (dato == null)
                 {
                     dato = new INVENTARI(unitOfWork1);
                     dato.DATA = data;
                     dato.LAMIERA_CODICE = cod_lam;
                     dato.Cruscotto = unitOfWork1.FindObject<CRUSCOTTO>(CriteriaOperator.Parse("LAMIERA_CODICE=?", cod_lam));
+                }
+
+                if (dato.Cruscotto == null)
+                {
+                    dato.Cruscotto = new CRUSCOTTO(unitOfWork1);
+                    dato.Cruscotto.LAMIERA_CODICE = cod_lam;
+                    dato.Cruscotto.Save();
+
+                    if (err_Cruscotto != null) err_Cruscotto += Environment.NewLine;
+                    err_Cruscotto += $"Codice Cassetto {cod_lam}: Nuovo --> Aggiunto";
                 }
 
                 int Kg = Int32.Parse(riga.ItemArray[CX.Kg].ToString());
@@ -170,10 +198,30 @@ namespace Prog_Rav_Ordini.Forms
 
                 if (Fg > 0) dato.NUMERO_CASSETTI_PIENI += 1;
                 //if (Fg == 0) dato.NUM_CASSETTI_VUOTI += 1;
-
                 dato.Save();
+
+                if (Aggiornare_Cassetti_Reali)
+                {
+                    dato.Cruscotto.CASSETTI_NUMERO_REALI += 1;
+                    dato.Cruscotto.Save();
+                }
+
                 unitOfWork1.CommitChanges();
             }
+
+            if (Aggiornare_Cassetti_Reali)
+            {
+                INFORMAZIONI informazioni = unitOfWork1.FindObject<INFORMAZIONI>(null);
+                if (informazioni != null)
+                {
+                    informazioni.AGGIORNAMENTO_DATA = data;
+                    informazioni.Save();
+                    Globale.Aggiornamento_Data = data;
+                }
+            }
+
+            if (err_Cruscotto != null)
+                MessageBox.Show(err_Cruscotto, "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             INVENTARI giorno_prima = null;
             object prima_data_obj = unitOfWork1.Evaluate<INVENTARI>(CriteriaOperator.Parse("Min(DATA)"), null);

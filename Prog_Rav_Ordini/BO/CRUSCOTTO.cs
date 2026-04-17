@@ -33,12 +33,21 @@ namespace Prog_Rav_Ordini.BO
             get { return fDESCRIZIONE; }
             set { SetPropertyValue<string>(nameof(DESCRIZIONE), ref fDESCRIZIONE, value); }
         }
+
         int fCASSETTI_NUMERO;
         public int CASSETTI_NUMERO
         {
             get { return fCASSETTI_NUMERO; }
             set { SetPropertyValue<int>(nameof(CASSETTI_NUMERO), ref fCASSETTI_NUMERO, value); }
         }
+
+        int fCASSETTI_NUMERO_REALI;
+        public int CASSETTI_NUMERO_REALI
+        {
+            get { return fCASSETTI_NUMERO_REALI; }
+            set { SetPropertyValue<int>(nameof(CASSETTI_NUMERO_REALI), ref fCASSETTI_NUMERO_REALI, value); }
+        }
+
         int fKG_MAX_CASSETTO;
         public int KG_MAX_CASSETTO
         {
